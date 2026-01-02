@@ -1,0 +1,71 @@
+menu = { 
+    1: {"name" : "Burger", "price" : 8.50},
+    2: {"name" : "Pizza", "price" : 12.00},
+    3: {"name" : "Pasta", "price" : 10.00},
+    4: {"name" : "Fries", "price" : 4.00},
+    5: {"name" : "Drink", "price" : 3.00}
+}
+
+def show_menu():
+    print("\n--- MENU ---")
+    for item_id, item in menu.items():
+        print(f"{item_id}. {item['name']} - RM {item['price']:.2f}")
+
+def take_order():
+    order = {}
+
+    while True:
+        show_menu()
+        choice = input("\nEnter item number (or 'q' to checkout): ")
+
+        if choice.lower() == 'q':
+            break
+
+        if not choice.isdigit() or int(choice) not in menu:
+            print("Invalid choice. Try again.")
+            continue
+
+        quantity = input("Enter quantity: ")
+
+        if not quantity.isdigit() or int(quantity) <= 0:
+            print("Invalid quantity.")
+            continue
+
+        item_id = int(choice)
+        quantity = int(quantity)
+
+        if item_id in order:
+            order[item_id] += quantity
+        else:
+            order[item_id] = quantity
+
+        print(f"Added {quantity} x {menu[item_id]['name']}")
+
+    return order
+
+def calculate_total(order):
+    total = 0
+    print("\n--- ORDER SUMMARY ---")
+
+    for item_id, qty in order.items():
+        name = menu[item_id]["name"]
+        price = menu[item_id]["price"]
+        subtotal = qty * price
+        total += subtotal
+        print(f"{name} x {qty} = {subtotal:.2f}")
+
+    print(f"\nTotal Amount: RM {total:.2f}")
+    return total
+
+def main():
+    print("Welcome to Simple Food Ordering System")
+    order = take_order()
+
+    if not order:
+        print("\nNo items ordered.")
+    else:
+        calculate_total(order)
+        print("\nThank you for ordering!")
+
+if __name__ == "__main__":
+    main()
